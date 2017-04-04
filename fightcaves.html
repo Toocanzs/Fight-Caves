@@ -1,0 +1,367 @@
+<html>
+<head>
+<style>
+body{
+	background-color:lightgrey;
+}
+td {
+	border-style: solid;
+	width:200px;
+	height:200px;
+	padding:0;
+}
+img{
+	width:90px;
+	height:90px;
+}
+#main{
+	width: 700px ;
+  margin-left: auto ;
+  margin-right: auto ;
+}
+input {
+	width:150px;
+	height:70px;
+	font-size:20px;
+}
+button{
+	width:140px;
+	height:70px;
+	border-color:black;
+}
+#setWave{
+	background-color:lightblue;
+}
+#nextWave{
+	background-color:lightgreen;
+}
+
+#reset{
+	background-color:red;
+}
+#prayPic{
+	width:70px;
+	height:70px;
+	display:inline-block;
+	float:right;
+}
+td div{
+	width:100%;
+	height:100%;
+	content-align:center;
+}
+td div img {
+	display:block;
+    margin:auto;
+}
+</style>
+</head>
+<body>
+
+
+<div id="main" style="margin-left:auto;">
+	<div id="controls">
+		<input type="number" placeholder="Enter wave" id = "waveInput"></input>
+		<button id= "setWave" onclick = "setWave();">Set Wave</button>
+		<button id= "nextWave" onclick = "update();">Next Wave</button>
+		<button id= "reset" onclick = "window.onload();">Reset</button>
+		<img id = "prayPic" src="fimage/nothing.png">
+	</div>
+	<div>
+		<table>
+			<tbody>
+				<tr>
+					<td id="bg1"><div id="box1"></div></td>
+					<td id="bg2"><div id="box2"></div></td>
+					<td id="bg3"><div id="box3"></div></td>
+				</tr>
+				<tr>
+					<td id="bg4"><div id="box4"></div></td>
+					<td id="bg5"><div id="box5"></div></td>
+					<td id="bg6"><div id="box6"></div></td>
+				</tr>
+				<tr>
+					<td id="bg7"><div id="box7"></div></td>
+					<td id="bg8"><div id="box8"></div></td>
+					<td id="bg9"><div id="box9"></div></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</div>
+
+
+
+
+
+<script>
+
+window.onload = function()
+{
+prayPic.src = "fimage/nothing.png"
+waveInput.value = "";
+var direction = 1;
+var pos = 0;
+var ready = false;
+var seed = [];
+var curWave = 0;
+
+
+window.boxes = [];
+
+function resetBoxes()
+{
+	for(var i = 0; i < 9;i++)
+	{
+		boxes[i].innerHTML = "";
+		if(i == 1 || i == 2 || i == 3 || i == 8)
+		{
+			//box.style.backgroundColor = "rgb(80,80,80)" 
+			setColor(box,0,0,0,0.6);
+			continue;
+		}
+		setColor(boxes[i],255,255,255,0.1);
+		//boxes[i].style.backgroundColor = "white";
+	}
+	
+}
+for(var i = 0; i < 9;i++)
+{
+	
+	var box = document.getElementById("box" + (i+1))
+	setColor(box,255,255,255,0.1);
+	//box.style.backgroundColor = "white";
+	document.getElementById("bg" + (i+1)).style.backgroundImage = "url('fimage/background/"+i+".png')";
+	box.n = i;
+	if(i == 1 || i == 2 || i == 3 || i == 8)
+	{
+		boxes.push(box);
+		setColor(box,0,0,0,0.6);
+		//box.style.backgroundColor = "rgb(80,80,80)" 
+		continue;
+	}
+	box.onclick = clickedBox;
+	box.oncontextmenu = rightClickedBox;
+	boxes.push(box);
+}
+resetBoxes();
+var clock = ["SE","SW","C","NW","SW","SE","S","NW","C","SE","SW","S","NW","C","S"];
+function getRotation(n)
+{
+	var a = n;
+	while(a > clock.length -1)
+	{
+		a -= clock.length;
+	}
+	return clock[a];
+}
+function clickedBox(e)
+{
+	if(seed.length > 1)
+	return;
+	seed[0] = numToDir(this.n)
+	console.log(seed);
+	setColor(this,0,255,0);
+	//this.style.backgroundColor = "green" 
+
+}
+
+
+function getDirection(s)
+{
+	var one = s[0];
+	var two = s[1];
+	for(var i = 0; i<clock.length;i++)
+	{
+		var cur = getRotation(i);
+		var next = getRotation(i+1);
+		if(cur == one && next == two)
+		{
+			pos = i+1;
+			direction = 1;
+			console.log(direction);
+			return 1;
+		}
+	}
+	
+	/*for(var i = clock.length-1; i=>0;i++)
+	{
+		var cur = getRotation(i);
+		var next = getRotation(i-1);
+		if(cur == one && next == two)
+		{
+			direction = -1;
+			console.log(direction);
+			return -1;
+		}
+	}*/
+	throw "???";
+	return 0;
+}
+function setColor(e,r,g,b,a)
+{
+	if(typeof(a) == "undefined")
+	{
+		e.style.backgroundColor = "rgba("+r+","+g+","+b+",0.1)"
+	}
+	else
+	{
+		e.style.backgroundColor = "rgba("+r+","+g+","+b+","+a+")"
+	}
+}
+
+function rightClickedBox(e)
+{
+	if(seed.length > 1)
+	return false;
+	seed[1] = numToDir(this.n)
+	console.log(seed);
+	getDirection(seed);
+	setColor(this,0,0,255);
+	//this.style.backgroundColor = "rgba(0,0,255,0.5)";
+	ready = true;
+	return false;
+}
+function numToDir(n)
+{
+	switch(n)
+	{
+		case 0:
+			return "NW";
+		case 4:
+			return "C";
+		case 6:
+			return "SW";
+		case 7: 
+			return "S";
+		//case 8:
+		//	return "SE";
+		case 5:
+			return "SE";
+		default:
+			throw "WHAT?" + n;
+	}
+}
+
+function dirToNum(s)
+{
+	switch(s)
+	{
+		case "NW":
+			return 0;
+		case "C":
+			return 4;
+		case "SW":
+			return 6;
+		case "S": 
+			return 7;
+		//case "SE":
+		//	return 8;
+		case "SE":
+			return 5;
+		default:
+			throw "WHAT?zx" + n;
+	}
+}
+function getImg(s)
+{
+	var img = document.createElement("img");
+	img.src = s;
+	return img;
+}
+function numToImg(n)
+{
+	return getImg("fimage/"+n+".png");
+}
+
+
+function getspawn (w, a) {
+	if (w >= 63) { a.push("702"); return w-63; }
+	if (w >= 31) { a.push("360"); return w-31; }
+	if (w >= 15) { a.push("180"); return w-15; }
+	if (w >= 7) { a.push("90"); return w-7; }
+	if (w >= 3) { a.push("45"); return w-3; }
+	a.push("22");
+	return w-1;
+}
+window.setWave = function()
+{
+	curWave = parseInt(waveInput.value)
+	waveInput.value = curWave;
+}
+
+
+
+window.update = function()
+{
+	curWave++;
+	resetBoxes();
+	
+	waveInput.value = curWave;
+	wave = curWave;
+	var curMonsters = [];
+	while (wave > 0) {
+		wave = getspawn(wave,curMonsters);
+		//getspawn((start+i)%15);
+	}
+	var spawnPos = [];
+	for(var i = 0; i<curMonsters.length;i++)
+	{
+		spawnPos.push(getRotation(pos+i));
+	}
+	
+	console.log(curMonsters,spawnPos);
+	
+	for(var i = 0;i<spawnPos.length;i++)
+	{
+		var boxNum = dirToNum(spawnPos[i]);
+		var img = numToImg(curMonsters[i]);
+		boxes[boxNum].appendChild(img);
+		if(i == 0)
+		{
+			setColor(boxes[boxNum],0,255,0);
+			//boxes[boxNum].style.backgroundColor = "green" 
+		}
+		if(i == 1)
+		{
+			setColor(boxes[boxNum],0,0,255);
+			//boxes[boxNum].style.backgroundColor = "blue" 
+		}
+	}
+	
+	if(curMonsters.indexOf("360") != -1)
+		prayPic.src = "fimage/magic.png"
+	else if(curMonsters.indexOf("90") != -1)
+		prayPic.src = "fimage/range.png"
+	else
+		prayPic.src = "fimage/nothing.png"
+	
+	pos++;
+	if(pos > clock.length -1)
+	{
+		pos -= clock.length;
+	}
+}
+
+
+/*
+int printspawn (int wave) {
+  if (wave >= 31) { printf("360 "); return wave-31; }
+  if (wave >= 15) { printf("180 "); return wave-15; }
+  if (wave >= 7) { printf("90 "); return wave-7; }
+  if (wave >= 3) { printf("45 "); return wave-3; }
+  printf("22 ");
+  return wave-1;
+}
+*/
+
+
+}
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<html>
+<head>
+</head>
+<body>
+<div style="margin-left:200px;">
+
+<img id = "pic1" src="fimage/22.png"  style="width:150px;height:150px;">
+<img id = "pic2" src="fimage/22.png"  style="width:150px;height:150px;">
+<img id = "pic3" src="fimage/22.png"  style="width:150px;height:150px;">
+<img id = "pic4" src="fimage/22.png"  style="width:150px;height:150px;">
+<img id = "pic5" src="fimage/22.png"  style="width:150px;height:150px;">
+<img id = "pic6" src="fimage/22.png"  style="width:150px;height:150px;">
+<div id = "waveText">Wave: 1</div>
+<button onclick = "update();">Next Wave</button>
+
+<img id = "prayPic" src="fimage/nothing.png"  style="width:150px;height:150px;">
+</div>
+
+
+
+
+
+<script>
+
+var wave = 1;
+
+
+var waves = [];
+
+waves[1] =  "22"
+waves[2] =	"22 22"
+waves[3] =	"45"
+waves[4] =	"45 22"
+waves[5] =	"45 22 22"
+waves[6] =	"45 45"
+waves[7] =	"90"
+waves[8] =	"90 22"
+waves[9] =	"90 22 22"
+waves[10]=	"90 45"
+waves[11]=	"90 45 22"
+waves[12]=	"90 45 22 22"
+waves[13]=	"90 45 45"
+waves[14]=	"90 90"
+waves[15]=	"180"
+waves[16]=	"180 22"
+waves[17]=	"180 22 22"
+waves[18]=	"180 45"
+waves[19]=	"180 45 22"
+waves[20]=	"180 45 22 22"
+waves[21]=	"180 45 45"
+waves[22]=	"180 90"
+waves[23]=	"180 90 22"
+waves[24]=	"180 90 22 22"
+waves[25]=	"180 90 45"
+waves[26]=	"180 90 45 22"
+waves[27]=	"180 90 45 22 22"
+waves[28]=	"180 90 45 45"
+waves[29]=	"180 90 90"
+waves[30]=	"180 180"
+waves[31]=	"360"
+waves[32]=	"360 22"
+waves[33]=	"360 22 22"
+waves[34]=	"360 45"
+waves[35]=	"360 45 22"
+waves[36]=	"360 45 22 22"
+waves[37]=	"360 45 45"
+waves[38]=	"360 90"
+waves[39]=	"360 90 22"
+waves[40]=	"360 90 22 22"
+waves[41]=	"360 90 45"
+waves[42]=	"360 90 45 22"
+waves[43]=	"360 90 45 22 22"
+waves[44]=	"360 90 45 45"
+waves[45]=	"360 90 90"
+waves[46]=	"360 180"
+waves[47]=	"360 180 22"
+waves[48]=	"360 180 22 22"
+waves[49]=	"360 180 45"
+waves[50]=	"360 180 45 22"
+waves[51]=	"360 180 45 22 22"
+waves[52]=	"360 180 45 45"
+waves[53]=	"360 180 90"
+waves[54]=	"360 180 90 22"
+waves[55]=	"360 180 90 22 22"
+waves[56]=	"360 180 90 45"
+waves[57]=	"360 180 90 45 22"
+waves[58]=	"360 180 90 45 22 22"
+waves[59]=	"360 180 90 45 45"
+waves[60]=	"360 180 90 90"
+waves[61]=	"360 180 180"
+waves[62]=	"360 360"
+waves[63]=	"702"
+
+function update()
+{
+wave+=1;
+for(var i = 0; i<6;i++)
+{
+document.getElementById("pic" + (i+1)).src = "fimage/nothing.png";
+}
+document.getElementById("waveText").innerHTML = "Wave: " + wave;
+
+
+
+var curWaves = waves[wave].split(" ");
+for(var i = 0; i<curWaves.length;i++)
+{
+	document.getElementById("pic" + (i+1)).src = "fimage/" + curWaves[i]+".png";
+	
+}
+console.log(curWaves)
+	if(curWaves.indexOf("360")>=0)
+{
+	prayPic.src = "fimage/magic.png"
+}
+else if (curWaves.indexOf("90")>=0)
+{
+	prayPic.src = "fimage/range.png"
+}
+else
+{
+	prayPic.src = "fimage/nothing.png"
+}
+
+
+
+}
+
+</script>
+
+</body>
+</html>
