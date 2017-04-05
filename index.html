@@ -132,7 +132,7 @@ var direction = 1;
 var pos = 0;
 var ready = false;
 var seed = [];
-var curWave = 0;
+window.curWave = 0;
 
 
 window.boxes = [];
@@ -188,7 +188,7 @@ function clickedBox(e)
 	if(seed.length > 1)
 	return;
 	seed[0] = numToDir(this.n)
-	console.log(seed);
+	//console.log(seed);
 	setColor(this,0,255,0);
 	//this.style.backgroundColor = "green" 
 
@@ -207,7 +207,7 @@ function getDirection(s)
 		{
 			pos = i+1;
 			direction = 1;
-			console.log(direction);
+			//console.log(direction);
 			return 1;
 		}
 	}
@@ -243,7 +243,7 @@ function rightClickedBox(e)
 	if(seed.length > 1)
 	return false;
 	seed[1] = numToDir(this.n)
-	console.log(seed);
+	//console.log(seed);
 	getDirection(seed);
 	setColor(this,0,0,255);
 	//this.style.backgroundColor = "rgba(0,0,255,0.5)";
@@ -338,10 +338,15 @@ window.update = function()
 		spawnPos.push(getRotation(pos+i));
 	}
 	
-	console.log(curMonsters,spawnPos);
-	
+	//console.log(curMonsters,spawnPos);
+	var output = "";
+	output+= "Wave: " + curWave + " Spawns: ";
 	for(var i = 0;i<spawnPos.length;i++)
 	{
+		var level = curMonsters[i];
+		var location = spawnPos[i];
+		output += level + " " + location;
+		if(i != spawnPos.length-1) output += ", ";
 		var boxNum = dirToNum(spawnPos[i]);
 		var img = numToImg(curMonsters[i]);
 		boxes[boxNum].appendChild(img);
@@ -356,7 +361,7 @@ window.update = function()
 			//boxes[boxNum].style.backgroundColor = "blue" 
 		}
 	}
-	
+	console.log(output);
 	if(curMonsters.indexOf("360") != -1)
 		prayPic.src = "fimage/magic.png"
 	else if(curMonsters.indexOf("90") != -1)
