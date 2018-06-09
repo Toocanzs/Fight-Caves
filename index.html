@@ -223,7 +223,7 @@ function getDirection(s)
 			return -1;
 		}
 	}*/
-	console.log("????");
+	throw "???";
 	return 0;
 }
 function setColor(e,r,g,b,a)
@@ -244,21 +244,7 @@ function rightClickedBox(e)
 	return false;
 	seed[1] = numToDir(this.n)
 	//console.log(seed);
-	var gotDirection = getDirection(seed);
-	console.log(gotDirection);
-	if(gotDirection == 0)
-	{
-		prayPic.src = "fimage/nothing.png"
-		waveInput.value = "";
-		direction = 1;
-		pos = 0;
-		ready = false;
-		seed = [];
-		window.curWave = 0;
-		resetBoxes();
-		return true;
-	}
-	
+	getDirection(seed);
 	setColor(this,0,0,255);
 	//this.style.backgroundColor = "rgba(0,0,255,0.5)";
 	ready = true;
